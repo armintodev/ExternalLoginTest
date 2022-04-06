@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <section>
+                <h4>Use different service for log in:</h4>
+                <hr />
+                @{
+                    var providers = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    if (!providers.Any())
+                    {
+                        <div>
+                            <p>
+                                We couldn't find any external provider
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form asp-controller="Auth" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in providers)
+                                    {
+                                        <input type="submit" class="btn btn-info" value="@provider.Name" name="provider" />
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</div>
